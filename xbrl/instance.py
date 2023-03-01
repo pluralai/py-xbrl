@@ -444,6 +444,9 @@ def parse_ixbrl(instance_path: str, cache: HttpCache, instance_url: str or None 
     contents = instance_file.read()
     pattern = r'<[ ]*script.*?\/[ ]*script[ ]*>'
     contents = re.sub(pattern, '', contents, flags=(re.IGNORECASE | re.MULTILINE | re.DOTALL))
+    contents = re.sub(r'^.*?<html>', '<html>', contents, flags=(re.IGNORECASE | re.MULTILINE | re.DOTALL))
+    contents = re.sub(r'<\/html>.*$', '</html>', contents, flags=(re.IGNORECASE | re.MULTILINE | re.DOTALL))
+    contents = re.sub(r'<br>', '', contents, flags=(re.IGNORECASE | re.MULTILINE | re.DOTALL))
 
     root: ET.ElementTree = parse_file(StringIO(contents))
     ns_map: dict = root.getroot().attrib['ns_map']
